@@ -43,6 +43,13 @@ NLOptions {
 
 	/**
 	 *
+	 * This value separates the line number and the line.
+	 *
+	 */
+	String numberLineSeparator = "  ";
+
+	/**
+	 *
 	 * The function searches for option statments, e.g., "-b a".  When such
 	 * an option statement is found, the option object is modified
 	 * accordingly.
@@ -91,6 +98,12 @@ NLOptions {
 						addToList = true;
 						break;
 				}
+			}
+			// This part handles the changing of the separator.
+			else if (s[i].equals("-s") && i < s.length - 1) {
+				addToList = false;
+				skipNextN = 1;
+				numberLineSeparator = s[i + 1];
 			}
 			// -z is not standardized.  I just liked the idea.
 			else if (s[i].equals("-z")) {
@@ -196,7 +209,7 @@ NLOptions {
 		for (int i = 0; i < numberOfSpaces; i++)
 			output = output + " ";
 
-		return output + n + "  ";
+		return output + n + numberLineSeparator;
 	}
 
 	/**
