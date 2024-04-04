@@ -29,6 +29,23 @@ NLOptions {
 		// safely return the input and do nothing else.
 		return s;
 	}
+
+	/**
+	 *
+	 * The output is a @code String which is derived from the contents of
+	 * the file at @code p but is processed in accordance with the options.
+	 *
+	 * @param p The path of the file which should be processed
+	 *
+	 */
+	public String
+	processFile(Path p)
+	throws IOException {
+		throw new UnsupportedOperationException(
+			"Reading from files is not yet supported."
+		);
+	}
+
 }
 
 /**
@@ -38,23 +55,6 @@ NLOptions {
  */
 public class
 NL {
-	/**
-	 *
-	 * The output is a @code String which is derived from the contents of
-	 * the file at @code p but is processed according to @code opt.
-	 *
-	 * @param opt The options for processing the file
-	 * @param p The path of the file which should be processed
-	 *
-	 */
-	public static String
-	nlOutputOf(NLOptions opt, Path p)
-	throws IOException {
-		throw new UnsupportedOperationException(
-			"Reading from files is not yet supported."
-		);
-	}
-
 	public static void
 	main(String[] argv) {
 		NLOptions opt = new NLOptions();
@@ -62,7 +62,7 @@ NL {
 
 		for (int i = 0; i < fileNames.length; i++) {
 			try {
-				System.out.println(nlOutputOf(opt, Path.of(fileNames[i])));
+				System.out.println(opt.processFile(Path.of(fileNames[i])));
 			} catch (IOException e) {
 				System.err.println(e);
 			}
