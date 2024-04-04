@@ -110,6 +110,11 @@ NLOptions {
 				addToList = false;
 				printFilePathsBeforeFileContents = true;
 			}
+			// -Z is also not standardized.  I just liked the idea.
+			else if (s[i].equals("-Z")) {
+				addToList = false;
+				printFilePathsBeforeFileContents = false;
+			}
 
 			if (addToList)
 				output.add(s[i]);
