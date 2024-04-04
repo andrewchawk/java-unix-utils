@@ -249,6 +249,30 @@ NLOptions {
  */
 public class
 NL {
+	/**
+	 *
+	 * The spirit of this program is much like the spirit of Unix's nl.
+	 * In fact, my original intent was writing a Java equivalent of nl.
+	 *
+	 * However, I ended up thinking that some options of nl were more
+	 * or less superfluous, and some options even seemed to be a bit too
+	 * restrictive.
+	 *
+	 * Some notable differences are as follows:
+	 * <ul>
+	 *   <li><p>
+	 *     The Java lookalike supports String-based number-line separators.
+	 *   </p></li>
+	 *   <li><p>
+	 *     The Java lookalike does <i>not</i> support logical pages.
+	 *   </p></li>
+	 *   <li><p>
+	 *     The Java lookalike supports the -z and -Z options, which enable
+	 *     and disable the printing of the names of files, respectively.
+	 *   </p></li>
+	 * </ul>
+	 *
+	 */
 	public static void
 	main(String[] argv) {
 		NLOptions opt = new NLOptions();
