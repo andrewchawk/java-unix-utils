@@ -84,7 +84,7 @@ NLOptions {
 	processFile(Path p)
 	throws IOException {
 		String output = "";
-		Object[] fileLines = Files.lines(p).toArray();
+		String[] fileLines = Arrays.copyOf(Files.lines(p).toArray(), Files.lines(p).toArray().length, String[].class);
 		int numberOfEmptyLines = 0;
 
 		for (int i = 0; i < fileLines.length; i++) {
