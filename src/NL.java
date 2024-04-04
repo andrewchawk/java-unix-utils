@@ -14,6 +14,16 @@ class
 NLOptions {
 	/**
 	 *
+	 * This value is the minimum size of the number column.
+	 * If the file contains more than 10**(numberPrefixIndentDepth + 1)
+	 * lines, then the length of the entries in the number column, i.e.
+	 * the leftmost part of the output of the program, will be inconsistent.
+	 *
+	 */
+	int numberPrefixIndentDepth = 8;
+
+	/**
+	 *
 	 * This field refers to the qualifier for numbering lines.
 	 *
 	 */
@@ -74,6 +84,28 @@ NLOptions {
 
 	/**
 	 *
+	 * indentNumber(n) is a decimal representation of n, but the decimal
+	 * representation is left-padded with spaces and has a length of the
+	 * maximum of numberPrefixIndentDepth and the length of the smallest
+	 * decimal representation of n.
+	 *
+	 * @param n The number which should be represented
+	 *
+	 */
+	private String
+	indentNumber(int n) {
+		String output = "";
+		int numberOfSpaces = numberPrefixIndentDepth -
+		                     Integer.toString(n).length();
+
+		for (int i = 0; i < numberOfSpaces; i++)
+			output = output + " ";
+
+		return output + n + "  ";
+	}
+
+	/**
+	 *
 	 * The output is a @code String which is derived from the contents of
 	 * the file at @code p but is processed in accordance with the options.
 	 *
@@ -96,11 +128,11 @@ NLOptions {
 			// Ask, and ye shall receive.
 			switch (numberingQualification) {
 				case AllLines:
-					output = output + "\t" + (i + 1) + "  ";
+					output = output + indentNumber(i + 1);
 					break;
 				case NonEmptyLines:
 					if (!fileLines[i].equals(""))
-						output = output + "\t" + (i - numberOfEmptyLines + 1) + "  ";
+						output = output + indentNumber(i - numberOfEmptyLines + 1);
 					break;
 				default:
 					break;
