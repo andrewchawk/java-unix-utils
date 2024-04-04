@@ -1,6 +1,8 @@
+import java.util.Arrays;
 import java.nio.file.Path;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.LinkedList;
 
 /**
  *
@@ -10,6 +12,13 @@ import java.nio.file.Files;
  */
 class
 NLOptions {
+	/**
+	 *
+	 * This field refers to the qualifier for numbering lines.
+	 *
+	 */
+	NumQual numberingQualification = NumQual.AllLines;
+
 	/**
 	 *
 	 * The function searches for option statments, e.g., "-b a".  When such
@@ -31,9 +40,36 @@ NLOptions {
 	 */
 	public String[]
 	parseAndDeleteOptionStatements(String[] s) {
-		// Currently, no options are supported, so we can decently
-		// safely return the input and do nothing else.
-		return s;
+		LinkedList<String> output = new LinkedList<String>();
+		boolean addToList = true;
+
+		for (int i = 0; i < s.length; i++) {
+			addToList = true;
+
+			// This part handles the line numbering options.
+			if (s[i].equals("-b") && i < s.length - 1) {
+				addToList = false;
+				switch (s[i + 1]) {
+					case "a":
+						numberingQualification = NumQual.AllLines;
+						break;
+					case "t":
+						numberingQualification = NumQual.NonEmptyLines;
+						break;
+					case "n":
+						numberingQualification = NumQual.NoNumberingAtAll;
+						break;
+					default:
+						addToList = true;
+						break;
+				}
+			}
+
+			if (addToList)
+				output.add(s[i]);
+		}
+
+		return Arrays.copyOf(output.toArray(), output.toArray().length, String[].class);
 	}
 
 	/**
@@ -49,8 +85,27 @@ NLOptions {
 	throws IOException {
 		String output = "";
 		Object[] fileLines = Files.lines(p).toArray();
+		int numberOfEmptyLines = 0;
 
 		for (int i = 0; i < fileLines.length; i++) {
+			// This bit is only useful if numberingQualification is
+			// NumQual.NonEmptyLines.
+			if (fileLines[i].equals(""))
+				numberOfEmptyLines++;
+
+			// Ask, and ye shall receive.
+			switch (numberingQualification) {
+				case AllLines:
+					output = output + "\t" + (i + 1) + "  ";
+					break;
+				case NonEmptyLines:
+					if (!fileLines[i].equals(""))
+						output = output + "\t" + (i - numberOfEmptyLines + 1) + "  ";
+					break;
+				default:
+					break;
+			}
+
 			output = output + fileLines[i];
 
 			// The naive approach involves adding a line break
@@ -68,6 +123,35 @@ NLOptions {
 		return output;
 	}
 
+	/**
+	 *
+	 * @code NumQual is used to determine which lines should be numbered.
+	 *
+	 * The name is a shortened version of "NumberingQualification".  I got
+	 * sick of the long lines.
+	 *
+	 */
+	enum
+	NumQual {
+		/**
+		 *
+		 * Every line should be numbered.
+		 *
+		 */
+		AllLines,
+		/**
+		 *
+		 * All lines which are not empty should be numbered.
+		 *
+		 */
+		NonEmptyLines,
+		/**
+		 *
+		 * No lines should be numbered.
+		 *
+		 */
+		NoNumberingAtAll
+	}
 }
 
 /**
