@@ -65,11 +65,16 @@ NLOptions {
 		LinkedList<String> output = new LinkedList<String>();
 		boolean addToList = true;
 
-		for (int i = 0; i < s.length; i++) {
+		// skipNextN enables the skipping of arguments which have
+		// already been processed.
+		int skipNextN = 0;
+
+		for (int i = 0; i < s.length; i = i + 1 + skipNextN) {
 			addToList = true;
 
 			// This part handles the line numbering options.
 			if (s[i].equals("-b") && i < s.length - 1) {
+				skipNextN = 1;
 				addToList = false;
 				switch (s[i + 1]) {
 					case "a":
@@ -82,6 +87,7 @@ NLOptions {
 						numberingQualification = NumQual.NoNumberingAtAll;
 						break;
 					default:
+						skipNextN = 0;
 						addToList = true;
 						break;
 				}
