@@ -20,6 +20,11 @@ NLOptions {
 	 * option statements.  Elements of the output arry may or may not be
 	 * valid filepaths.
 	 *
+	 * The name "parseAndDeleteOptionStatements" is a misnomer -- nothing
+	 * is being deleted from the input array.
+	 * "parseAndTransferFilepathsToNewArrayAndReturnNewArray" is just
+	 * <i>way</i> too long, even for Java.
+	 *
 	 * @param s The list of possible option statements and possible
 	 * filepaths
 	 * 
