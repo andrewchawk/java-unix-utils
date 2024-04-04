@@ -1,5 +1,6 @@
 import java.nio.file.Path;
 import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  *
@@ -41,9 +42,25 @@ NLOptions {
 	public String
 	processFile(Path p)
 	throws IOException {
-		throw new UnsupportedOperationException(
-			"Reading from files is not yet supported."
-		);
+		String output = "";
+		Object[] fileLines = Files.lines(p).toArray();
+
+		for (int i = 0; i < fileLines.length; i++) {
+			output = output + fileLines[i];
+
+			// The naive approach involves adding a line break
+			// character with every element of fileLines.  However,
+			// the naive approach adds an extra line break character
+			// to the end of output, which is kind of nasty.  This
+			// solution is, admittedly, also kind of nasty, but,
+			// hey, the result is fine and can be easily understood,
+			// and comments are *for* explaining these sorts of
+			// things!
+			if (i < fileLines.length - 1)
+				output = output + "\n";
+		}
+
+		return output;
 	}
 
 }
