@@ -106,6 +106,30 @@ NLOptions {
 
 	/**
 	 *
+	 * The function returns a version of the specified line.  The output is
+	 * numbered in accordance with the options.
+	 *
+	 * @param currentLine The line to which the number should be added
+	 * @param currentLineNum the index of the line
+	 * @param numEmptyLines the number of empty lines which have so fat
+	 * been encountered in the current file
+	 *
+	 */
+	private String
+	numberedLine(String currentLine, int currentLineNum, int numEmptyLines) {
+		switch (numberingQualification) {
+			case AllLines:
+				return indentNumber(currentLineNum + 1) + currentLine;
+			case NonEmptyLines:
+				if (!currentLine.equals(""))
+					return indentNumber(currentLineNum - numEmptyLines + 1) + currentLine;
+			default:
+				return currentLine;
+		}
+	}
+
+	/**
+	 *
 	 * The output is a @code String which is derived from the contents of
 	 * the file at @code p but is processed in accordance with the options.
 	 *
@@ -125,20 +149,7 @@ NLOptions {
 			if (fileLines[i].equals(""))
 				numberOfEmptyLines++;
 
-			// Ask, and ye shall receive.
-			switch (numberingQualification) {
-				case AllLines:
-					output = output + indentNumber(i + 1);
-					break;
-				case NonEmptyLines:
-					if (!fileLines[i].equals(""))
-						output = output + indentNumber(i - numberOfEmptyLines + 1);
-					break;
-				default:
-					break;
-			}
-
-			output = output + fileLines[i];
+			output += numberedLine(fileLines[i], i, numberOfEmptyLines);
 
 			// The naive approach involves adding a line break
 			// character with every element of fileLines.  However,
