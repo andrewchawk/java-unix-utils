@@ -31,6 +31,18 @@ NLOptions {
 
 	/**
 	 *
+	 * If this value is true, then before any file is printed, the
+	 * corresponding filepath is printed to the standard output.
+	 *
+	 * I strongly recommend that users of this option also enable printing
+	 * the numbers of lines; otherwise, parsing the output becomes
+	 * a task of variable difficulty.
+	 *
+	 */
+	boolean printFilePathsBeforeFileContents;
+
+	/**
+	 *
 	 * The function searches for option statments, e.g., "-b a".  When such
 	 * an option statement is found, the option object is modified
 	 * accordingly.
@@ -73,6 +85,11 @@ NLOptions {
 						addToList = true;
 						break;
 				}
+			}
+			// -z is not standardized.  I just liked the idea.
+			else if (s[i].equals("-z")) {
+				addToList = false;
+				printFilePathsBeforeFileContents = true;
 			}
 
 			if (addToList)
@@ -142,6 +159,10 @@ NLOptions {
 		String output = "";
 		String[] fileLines = Arrays.copyOf(Files.lines(p).toArray(), Files.lines(p).toArray().length, String[].class);
 		int numberOfEmptyLines = 0;
+
+		// Should I move this part to NL.main?
+		if (printFilePathsBeforeFileContents)
+			System.out.println(p);
 
 		for (int i = 0; i < fileLines.length; i++) {
 			// This bit is only useful if numberingQualification is
